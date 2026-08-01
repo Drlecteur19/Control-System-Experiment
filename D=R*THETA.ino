@@ -22,7 +22,12 @@ const int servoPin = 6;
 //==============================
 // Parameters
 //==============================
-const float R = 2.0;      // Radius (cm)
+const float R = 127.3;
+
+thetaRad = distance / R;
+thetaDeg = thetaRad * 180.0 / PI;
+
+scanner.write(thetaDeg);
 
 //==============================
 // Variables
