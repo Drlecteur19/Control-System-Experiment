@@ -2,27 +2,27 @@
 
 ## 📌 Project Overview
 
-This project is a practical control and instrumentation experiment designed to explore the relationship between **distance measurement, signal processing, mathematical modeling, and servo motor control**.
+This project is a practical control and instrumentation experiment focused on the relationship between **distance measurement, signal filtering, mathematical modeling, and servo motor control**.
 
-The system combines:
+The system uses an **HC-SR04 ultrasonic sensor** to measure distance and an **MG90S servo motor** to generate an angular response based on the measured distance.
 
-- HC-SR04 ultrasonic distance sensor
-- MG90S servo motor
+The project is developed progressively, starting with sensor characterization and measurement filtering, followed by mathematical modeling and actuator control. Closed-loop control and PID control will be investigated in later stages.
+
+### Main Components
+
 - Arduino
+- HC-SR04 Ultrasonic Sensor
+- MG90S Servo Motor
 - 16×2 I2C LCD
 - Signal filtering techniques
 - Mathematical modeling
-- Feedback and control concepts
-
-The project is developed progressively, starting from sensor characterization and measurement filtering, then moving toward actuator control and, eventually, closed-loop control.
-
-The main objective is not only to build a working system, but also to understand the **engineering principles behind each stage**.
+- Control-system concepts
 
 ---
 
 # 1. Arc-Length Model: Distance-to-Angle Relationship
 
-The first experiment is based on the geometric relationship between the **arc length of a circle** and its angular displacement.
+The first experiment is based on the geometric relationship between the arc length of a circle and its angular displacement.
 
 The fundamental equation is:
 
@@ -33,7 +33,7 @@ D = R\theta
 where:
 
 - \(D\) = arc length / displacement
-- \(R\) = radius of the servo mechanism
+- \(R\) = radius of the mechanism
 - \(\theta\) = angular displacement in radians
 
 Therefore:
@@ -42,7 +42,7 @@ Therefore:
 \theta = \frac{D}{R}
 \]
 
-Since the Arduino servo library requires the angle in degrees, the angle is converted from radians to degrees:
+Since the Arduino servo library uses degrees, the angle is converted from radians to degrees:
 
 \[
 \theta_{deg}
@@ -51,31 +51,50 @@ Since the Arduino servo library requires the angle in degrees, the angle is conv
 \frac{180}{\pi}
 \]
 
-### Example
-
-For:
+For example, using:
 
 \[
 R = 127.3\ cm
 \]
 
-and:
+and a measured distance of:
 
 \[
 D = 192.58\ cm
 \]
 
-we obtain:
+the resulting servo angle is approximately:
 
 \[
-\theta =
-\frac{192.58}{127.3}
-\approx 1.512\ rad
+\theta_{deg}=86.68^\circ
 \]
 
-and therefore:
+---
 
-\[
+# 2. System Architecture
+
+The basic signal flow is:
+
+```text
+        HC-SR04
+           │
+           ▼
+   Raw Distance Measurement
+           │
+           ▼
+    Signal Filtering
+           │
+           ▼
+    Filtered Distance
+           │
+           ▼
+      D / R = θ
+           │
+           ▼
+    Radians → Degrees
+           │
+           ▼
+       MG90S Servo
 \theta_{deg}\approx86.68^\circ
 \]
 
